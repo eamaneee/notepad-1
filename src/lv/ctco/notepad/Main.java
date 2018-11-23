@@ -7,15 +7,19 @@ import java.util.Scanner;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static List<Person> records = new ArrayList<>();
+    static List<Record> records = new ArrayList<>();
 
     public static void main(String[] args) {
         for (; ; ) {
             System.out.print("cmd: ");
             String cmd = scanner.next();
             switch (cmd) {
-                case "create":
-                    createPerson();
+                case "search":
+                    search();
+                    break;
+                case "cp":
+                case "createPerson":
+                    createRecord(new Person());
                     break;
                 case "help":
                     showHelp();
@@ -25,6 +29,10 @@ public class Main {
                 case "list":
                     showList();
                     break;
+                case "sn":
+                case "stickyNote":
+                    createRecord(new StickyNote());
+                    break;
                 case "exit":
                     return;
                 default:
@@ -33,11 +41,51 @@ public class Main {
         }
     }
 
+    private static void search(){
+        String ss = askPhone("What do you want to find?");
+        records.stream()
+                .filter (r-> r.contains(ss))
+                .forEach(System.out::println);
+    }
+
+//    {
+//        String ss = askString("What do you want to find?");
+//        for (Record r : records) {
+//            if (r.contains(ss)) {
+//                System.out.println(r);
+//            }
+//        }
+//    }
+
+    private static void createRecord (Record record) {
+        record.askData();
+        records.add(record);
+        System.out.println(record);
+    }
+
+//    private static void createPerson() {
+//        Person p = new Person();
+//        p.askData();
+//        records.add(p);
+//    }
+//    private static void stickyNote() {
+//        String txt = askString("Enter text");
+//        StickyNote sn = new StickyNote();
+//        sn.setText(txt);
+//        records.add(sn);
+
+//        StickyNote sn = new StickyNote();
+//        String stickyNote = askString("Write a note");
+//        sn.setStickyNote(stickyNote); // metod Sticky note ne dobavlen v class, tam Text
+//        records.add(sn);
+//    }
+
+
     private static void deleteRecordById() {
         int id = askInt("ID to delete");
         for (int i = 0; i < records.size(); i++) {
-            Person p = records.get(i);
-            if (p.getId() == id) {
+            Record r = records.get(i);
+            if (r.getId() == id) {
                 records.remove(i);
                 break;
             }
@@ -53,26 +101,9 @@ public class Main {
 
     }
 
-    private static void createPerson() {
-        Person p = new Person();
-
-        String firstName = askString("First Name");
-        p.setFirstName(firstName);
-
-        String lastName = askString("Last Name");
-        p.setLastName(lastName);
-
-        String email = askString("Email");
-        p.setEmail(email);
-
-        String phone = askPhone("Phone");
-        p.setPhone(phone);
-
-        records.add(p);
-    }
 
     public static String askString(String msg) {
-        for (;;) {
+        for (; ; ) {
             System.out.print(msg + ": ");
             String val = scanner.next();
             if (!val.startsWith("\"")) {

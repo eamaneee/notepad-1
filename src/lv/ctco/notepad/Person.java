@@ -1,21 +1,13 @@
 package lv.ctco.notepad;
 
-public class Person {
-    private static int counter = 0;
-    private int id;
+public class Person extends Record {
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
+    private String gender;
 
-    public Person() {
-        counter++;
-        id = counter;
-    }
 
-    public int getId() {
-        return id;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -49,14 +41,37 @@ public class Person {
         this.phone = phone;
     }
 
+    public String getGender() { return gender;}
+
+    public void setGender(String gender) { this.gender = gender;}
+
     @Override
     public String toString() {
         return "Person{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
+                "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
+                ", gender='" + gender + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean contains(String str) {
+        return firstName.contains(str)
+                || lastName.contains(str)
+                || email.contains(str)
+                || phone.contains(str)
+                || gender.contains(str);
+    }
+
+    @Override
+    public void askData() {
+         firstName = Main.askString("First Name");
+         lastName = Main.askString("Last Name");
+         email = Main.askString("Email");
+         phone = Main.askPhone("Phone");
+         gender = Main.askString("Gender");
+
     }
 }
